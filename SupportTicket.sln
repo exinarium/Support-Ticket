@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportTicket.API", "SupportTicket.API\SupportTicket.API.csproj", "{076DBC40-90F8-42F4-AE0B-3E897875433A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportTicket.SDK", "SupportTicket.SDK\SupportTicket.SDK.csproj", "{A188D6D0-05ED-44D2-B045-E55041E27784}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{076DBC40-90F8-42F4-AE0B-3E897875433A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076DBC40-90F8-42F4-AE0B-3E897875433A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076DBC40-90F8-42F4-AE0B-3E897875433A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076DBC40-90F8-42F4-AE0B-3E897875433A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A188D6D0-05ED-44D2-B045-E55041E27784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A188D6D0-05ED-44D2-B045-E55041E27784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A188D6D0-05ED-44D2-B045-E55041E27784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A188D6D0-05ED-44D2-B045-E55041E27784}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

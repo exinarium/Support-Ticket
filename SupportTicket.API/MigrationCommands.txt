@@ -1,0 +1,2 @@
+dotnet ef migrations add [NAME] --context DataContext --output-dir Domain/Repository/Migrations
+dotnet ef database update
