@@ -24,6 +24,13 @@ public class AuthorizedStateProvider(ISessionStorageService _sessionStorageServi
 
     public void NotifyUserAuthentication(string token)
     {
+        if (string.IsNullOrEmpty(token))
+        {
+            var state = Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+            NotifyAuthenticationStateChanged(state);
+            return;
+        }
+
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt"));
         var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
         NotifyAuthenticationStateChanged(authState);

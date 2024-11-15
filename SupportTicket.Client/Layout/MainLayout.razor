@@ -1,4 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using SupportTicket.Client.Providers
+@using SupportTicket.Client.Services
+@inherits LayoutComponentBase
+@inject ISessionStorageService sessionStorageService
+@inject AuthenticationStateProvider authenticationStateProvider
+
 <div class="page">
     <div class="sidebar">
         <NavMenu/>
@@ -6,7 +12,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a onclick="@OnLogout">Logout</a>
         </div>
 
         <article class="content px-4">
@@ -14,3 +20,12 @@
         </article>
     </main>
 </div>
+
+@code
+{
+    public async Task OnLogout()
+    {
+        await sessionStorageService.RemoveItemAsync("token");
+        ((AuthorizedStateProvider)authenticationStateProvider).NotifyUserAuthentication(null);
+    }
+}

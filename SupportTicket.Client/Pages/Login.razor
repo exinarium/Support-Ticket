@@ -1,6 +1,35 @@
 @page "/login"
-<h3>Login</h3>
+@using Microsoft.AspNetCore.Components.Authorization
+@using SupportTicket.Client.Providers
+@using SupportTicket.Client.Services
+@inject ISessionStorageService sessionStorageService
+@inject AuthenticationStateProvider authenticationStateProvider
+
+<div class="sticky-top header-row d-flex align-items-center" style="height: 60px; padding-left: 20px;">
+    <span style="color: white">Support Ticket</span>
+</div>
+
+<div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 60px);">
+    <div class="w-50">
+        <h4 class="d-flex justify-content-center">Login</h4>
+
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control mb-3" type="text" id="username" placeholder="Email Address"/>
+
+        <label class="form-label" for="username">Password</label>
+        <input class="form-control mb-3" type="password" id="password" placeholder="Password"/>
+
+        <button class="btn btn-primary w-100" onclick="@OnLogin">Login</button>
+    </div>
+</div>
 
 @code {
 
+    private async Task OnLogin()
+    {
+        //Test token
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjk5NTQ0MDAwLCJleHAiOjE3MzExNjY0MDAsImlhdCI6MTY5OTU0NDAwMH0.S8_BpV8RTIlzXZZ-c88sEwbxu8xGqS6JBK_dAXMwPtc";
+        await sessionStorageService.SetItemAsync("token", token);
+        ((AuthorizedStateProvider)authenticationStateProvider).NotifyUserAuthentication(token);
+    }
 }
