@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportTicket.API", "Suppor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportTicket.SDK", "SupportTicket.SDK\SupportTicket.SDK.csproj", "{A188D6D0-05ED-44D2-B045-E55041E27784}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportTicket.Client", "SupportTicket.Client\SupportTicket.Client.csproj", "{0CD32A18-C1AE-4A99-A0A7-211D56B6054F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{A188D6D0-05ED-44D2-B045-E55041E27784}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A188D6D0-05ED-44D2-B045-E55041E27784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A188D6D0-05ED-44D2-B045-E55041E27784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CD32A18-C1AE-4A99-A0A7-211D56B6054F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD32A18-C1AE-4A99-A0A7-211D56B6054F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD32A18-C1AE-4A99-A0A7-211D56B6054F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD32A18-C1AE-4A99-A0A7-211D56B6054F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
