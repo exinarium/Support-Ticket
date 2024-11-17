@@ -1,2 +1,7 @@
 dotnet ef migrations add [NAME] --context DataContext --output-dir Domain/Repository/Migrations
 dotnet ef database update
+
+RUN Postgress in Docker:
+
+docker run -d --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret_key -e PGDATA=/var/lib/postgresql/data/pgdata -v /Users/exinarium/Source/personal/CustomerSupport/pgData:/var/lib/postgresql/data postgres
+
