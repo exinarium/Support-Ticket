@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net.Mail;
 using SupportTicket.SDK.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,68 +10,62 @@ namespace SupportTicket.API.Domain.Repository.Models;
 public class Ticket
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required]
     [MaxLength(100)]
     [Column("subject")]
-    public string Subject { get; set; }
+    public string Subject { get; set; } = string.Empty;
 
     [Required]
     [Column("message")]
-    public string Message { get; set; }
+    [MaxLength(1000)]
+    public string Message { get; set; } = string.Empty;
 
     [Required]
     [Column("status")]
-    public TicketStatus Status { get; set; }
+    public TicketStatus Status { get; set; } = TicketStatus.Open;
 
     [Required]
     [Column("priority")]
-    public TicketPriority Priority { get; set; }
+    public TicketPriority Priority { get; set; } = TicketPriority.Medium;
 
     [Column("tags", TypeName = "text[]")]
-    public string[] Tags { get; set; }
+    public string[] Tags { get; set; } = [];
 
     [Required]
     [Column("createDateTime")]
-    public DateTime CreatedDateTime { get; set; }
+    public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
     [Column("updateDateTime")]
     public DateTime? UpdatedDateTime { get; set; }
 
     [Required]
     [Column("createdBy")]
-    public Guid CreatedById { get; set; }
+    public Guid CreatedById { get; set; } = Guid.Empty;
 
     [ForeignKey("CreatedById")]
-    public User CreatedBy { get; set; }
+    public User CreatedBy { get; set; } = new();
 
     [Required]
     [Column("updatedBy")]
-    public Guid UpdatedById { get; set; }
+    public Guid? UpdatedById { get; set; }
 
     [ForeignKey("UpdatedById")]
-    public User UpdatedBy { get; set; }
+    public User? UpdatedBy { get; set; }
 
     [Required]
     [Column("assignedTo")]
-    public Guid AssignedToId { get; set; }
+    public Guid? AssignedToId { get; set; }
 
     [ForeignKey("AssignedToId")]
-    public User AssignedTo { get; set; }
+    public User? AssignedTo { get; set; }
 
-    public ICollection<TicketHistory> History { get; set; }
+    public ICollection<TicketHistory> History { get; set; } = [];
 
-    public ICollection<Comment> Comments { get; set; }
+    public ICollection<Comment> Comments { get; set; } = [];
 
-    public ICollection<File> Attachments { get; set; }
-
-    public Ticket()
-    {
-        History = new HashSet<TicketHistory>();
-        Comments = new HashSet<Comment>();
-        Attachments = new HashSet<File>();
-    }
+    public ICollection<File> Attachments { get; set; } = [];
 }
 
 public class TicketConfiguration : IEntityTypeConfiguration<Ticket>

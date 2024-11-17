@@ -11,26 +11,27 @@ public class User
 {
     [Key]
     [Column("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required]
     [MaxLength(50)]
     [Column("email")]
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     [Required]
     [Column("password")]
-    public string Password { get; set; }
+    [MaxLength(255)]
+    public string Password { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(50)]
     [Column("firstName")]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(50)]
     [Column("lastName")]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
 
     [Column("isEmailConfirmed")]
     public bool IsEmailConfirmed { get; set; }
@@ -46,7 +47,7 @@ public class User
 
     [Required]
     [Column("createDateTime")]
-    public DateTime CreatedDateTime { get; set; }
+    public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
     [Column("updateDateTime")]
     public DateTime? UpdatedDateTime { get; set; }
@@ -54,50 +55,36 @@ public class User
     // Foreign keys
     [Required]
     [Column("createBy")]
-    public Guid CreatedById { get; set; }
+    public Guid CreatedById { get; set; } = Guid.Empty;
 
     [Column("updateBy")]
     public Guid? UpdatedById { get; set; }
 
     // Navigation properties
     [ForeignKey("CreatedById")]
-    public virtual User CreatedByUser { get; set; }
+    public virtual User CreatedByUser { get; set; } = new();
 
     [ForeignKey("UpdatedById")]
     public virtual User? UpdatedByUser { get; set; }
 
     [Column("account")]
-    public Guid AccountId { get; set; }
+    public Guid AccountId { get; set; } = Guid.Empty;
 
     [ForeignKey("AccountId")]
-    public virtual Account Account { get; set; }
+    public virtual Account Account { get; set; } = new();
 
     [Column("isActive")]
     public bool IsActive { get; set; } = true;
 
     // Inverse navigation properties
-    public virtual ICollection<User> CreatedUsers { get; set; }
-    public virtual ICollection<User> UpdatedUsers { get; set; }
-    public virtual ICollection<Ticket> CreatedTickets { get; set; }
-    public virtual ICollection<Ticket> UpdatedTickets { get; set; }
-    public virtual ICollection<Ticket> AssignedTickets { get; set; }
-    public virtual ICollection<File> Files { get; set; }
-
-    public virtual ICollection<Comment> UpdatedComments { get; set; }
-
-    public virtual ICollection<Comment> CreatedComments { get; set; }
-
-    public User()
-    {
-        CreatedUsers = new HashSet<User>();
-        UpdatedUsers = new HashSet<User>();
-        CreatedTickets = new HashSet<Ticket>();
-        AssignedTickets = new HashSet<Ticket>();
-        UpdatedTickets = new HashSet<Ticket>();
-        Files = new HashSet<File>();
-        UpdatedComments = new HashSet<Comment>();
-        CreatedComments = new HashSet<Comment>();
-    }
+    public virtual ICollection<User> CreatedUsers { get; set; } = [];
+    public virtual ICollection<User> UpdatedUsers { get; set; } = [];
+    public virtual ICollection<Ticket> CreatedTickets { get; set; } = [];
+    public virtual ICollection<Ticket> UpdatedTickets { get; set; } = [];
+    public virtual ICollection<Ticket> AssignedTickets { get; set; } = [];
+    public virtual ICollection<File> Files { get; set; } = [];
+    public virtual ICollection<Comment> UpdatedComments { get; set; } = [];
+    public virtual ICollection<Comment> CreatedComments { get; set; } = [];
 }
 
 public class UserConfiguration : IEntityTypeConfiguration<User>

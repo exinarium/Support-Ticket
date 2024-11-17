@@ -4,7 +4,7 @@ namespace SupportTicket.Client.Services;
 
 public interface ISessionStorageService
 {
-    Task<T> GetItemAsync<T>(string key);
+    Task<T?> GetItemAsync<T>(string key);
     Task SetItemAsync<T>(string key, T value);
     Task RemoveItemAsync(string key);
     Task ClearAsync();
@@ -19,9 +19,9 @@ public class SessionStorageService : ISessionStorageService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task<T> GetItemAsync<T>(string key)
+    public async Task<T?> GetItemAsync<T>(string key)
     {
-        var json = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", key);
+        var json = await _jsRuntime.InvokeAsync<string?>("sessionStorage.getItem", key);
         return json == null ? default : System.Text.Json.JsonSerializer.Deserialize<T>(json);
     }
 

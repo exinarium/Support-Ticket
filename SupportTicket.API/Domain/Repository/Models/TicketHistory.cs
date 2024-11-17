@@ -10,43 +10,45 @@ public class TicketHistory
 {
     [Key]
     [Column("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required]
     [MaxLength(50)]
     [Column("field")]
-    public string Field { get; set; }
+    public string Field { get; set; } = string.Empty;
 
     [Required]
     [Column("oldValue")]
-    public string OldValue { get; set; }
+    [MaxLength(2000)]
+    public string OldValue { get; set; } = string.Empty;
 
     [Required]
     [Column("newValue")]
-    public string NewValue { get; set; }
+    [MaxLength(2000)]
+    public string NewValue { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(200)]
     [Column("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [Required]
     [Column("changedDateTime")]
-    public DateTime ChangedDateTime { get; set; }
+    public DateTime ChangedDateTime { get; set; } = DateTime.UtcNow;
 
     [Required]
     [Column("ticket")]
-    public Guid TicketId { get; set; }
+    public Guid TicketId { get; set; } = Guid.Empty;
 
     [ForeignKey("TicketId")]
-    public Ticket Ticket { get; set; }
+    public Ticket Ticket { get; set; } = new();
 
     [Required]
     [Column("ChangedBy")]
-    public Guid ChangedById { get; set; }
+    public Guid ChangedById { get; set; } = Guid.Empty;
 
     [ForeignKey("ChangedById")]
-    public User ChangedBy { get; set; }
+    public User ChangedBy { get; set; } = new();
 }
 
 public class TicketHistoryConfiguration : IEntityTypeConfiguration<TicketHistory>

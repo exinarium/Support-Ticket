@@ -2,8 +2,8 @@
 @using SupportTicket.Client.Providers
 @using SupportTicket.Client.Services
 @inherits LayoutComponentBase
-@inject ISessionStorageService sessionStorageService
-@inject AuthenticationStateProvider authenticationStateProvider
+@inject ISessionStorageService SessionStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="page">
     <div class="sidebar">
@@ -12,7 +12,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a onclick="@OnLogout">Logout</a>
+            <a @onclick="OnLogout">Logout</a>
         </div>
 
         <article class="content px-4">
@@ -25,7 +25,7 @@
 {
     public async Task OnLogout()
     {
-        await sessionStorageService.RemoveItemAsync("token");
-        ((AuthorizedStateProvider)authenticationStateProvider).NotifyUserAuthentication(null);
+        await SessionStorageService.RemoveItemAsync("token");
+        ((AuthorizedStateProvider)AuthenticationStateProvider).NotifyUserAuthentication(string.Empty);
     }
 }

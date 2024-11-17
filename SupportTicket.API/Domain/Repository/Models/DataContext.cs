@@ -6,13 +6,13 @@ namespace SupportTicket.API.Domain.Repository.Models;
 
 public class DataContext(IOptions<DatabaseConfig> databaseConfig) : DbContext
 {
-    private DatabaseConfig _databaseConfig => databaseConfig.Value;
+    private DatabaseConfig DatabaseConfig => databaseConfig.Value;
 
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(connectionString:
-            $"Server={_databaseConfig.Host};Port={_databaseConfig.Port};User Id={_databaseConfig.Username};Password={_databaseConfig.Password};Database={_databaseConfig.DatabaseName};");
+            $"Server={DatabaseConfig.Host};Port={DatabaseConfig.Port};User Id={DatabaseConfig.Username};Password={DatabaseConfig.Password};Database={DatabaseConfig.DatabaseName};");
         base.OnConfiguring(optionsBuilder);
     }
 

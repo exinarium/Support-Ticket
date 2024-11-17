@@ -10,22 +10,22 @@ public class File
 {
     [Key]
     [Column("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(100)]
     [Required]
     [Column("fileName")]
-    public string FileName { get; set; }
+    public string FileName { get; set; } = string.Empty;
 
     [MaxLength(20)]
     [Required]
     [Column("contentType")]
-    public string ContentType { get; set; }
+    public string ContentType { get; set; } = string.Empty;
 
     [MaxLength(255)]
     [Required]
     [Column("filePath")]
-    public string FilePath { get; set; }
+    public string FilePath { get; set; } = string.Empty;
 
     [Required]
     [Column("fileSize")]
@@ -33,13 +33,13 @@ public class File
 
     [Required]
     [Column("uploadedDateTime")]
-    public DateTime UploadDateTime { get; set; }
+    public DateTime UploadDateTime { get; set; } = DateTime.UtcNow;
 
     [Column("uploadedBy")]
     public Guid? UploadedById { get; set; }
 
     [ForeignKey("UploadedById")]
-    public User UploadedBy { get; set; }
+    public User? UploadedBy { get; set; }
 
     [Column("ticket")]
     public Guid? TicketId { get; set; }

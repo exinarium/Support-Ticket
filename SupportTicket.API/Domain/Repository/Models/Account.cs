@@ -10,44 +10,39 @@ public class Account
 {
     [Key]
     [Column("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(50)]
     [Required]
     [Column("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [MaxLength(30)]
     [Required]
     [Column("contactName")]
-    public string ContactName { get; set; }
+    public string ContactName { get; set; } = string.Empty;
 
     [MaxLength(15)]
     [Required]
     [Column("contactTelephone")]
-    public string ContactTelephone { get; set; }
+    public string ContactTelephone { get; set; } = string.Empty;
 
     [MaxLength(30)]
     [Required]
     [Column("contactEmail")]
-    public string ContactEmail { get; set; }
+    public string ContactEmail { get; set; } = string.Empty;
 
     [Column("isActive")]
     public bool IsActive { get; set; } = true;
 
     [Required]
     [Column("createDateTime")]
-    public DateTime CreatedDateTime { get; set; }
+    public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
     [Column("updateDateTime")]
     public DateTime? UpdatedDateTime { get; set; }
 
-    public virtual ICollection<User> Users { get; set; }
-
-    public Account()
-    {
-        Users = new HashSet<User>();
-    }
+    public virtual ICollection<User> Users { get; set; } = [];
 }
 
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
