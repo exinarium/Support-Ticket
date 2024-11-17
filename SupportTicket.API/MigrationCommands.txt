@@ -3,5 +3,5 @@ dotnet ef database update
 
 RUN Postgress in Docker:
 
-docker run -d --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret_key -e PGDATA=/var/lib/postgresql/data/pgdata -v /Users/exinarium/Source/personal/CustomerSupport/pgData:/var/lib/postgresql/data postgres
+docker run -d --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret_key -e PGDATA=/var/lib/postgresql/data/pgdata -v ~/source/personal/pgData:/var/lib/postgresql/data postgres
 

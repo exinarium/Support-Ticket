@@ -55,14 +55,14 @@ public class User
     // Foreign keys
     [Required]
     [Column("createBy")]
-    public Guid CreatedById { get; set; } = Guid.Empty;
+    public Guid? CreatedById { get; set; } = Guid.Empty;
 
     [Column("updateBy")]
     public Guid? UpdatedById { get; set; }
 
     // Navigation properties
     [ForeignKey("CreatedById")]
-    public virtual User CreatedByUser { get; set; } = new();
+    public virtual User? CreatedByUser { get; set; }
 
     [ForeignKey("UpdatedById")]
     public virtual User? UpdatedByUser { get; set; }
@@ -71,7 +71,7 @@ public class User
     public Guid AccountId { get; set; } = Guid.Empty;
 
     [ForeignKey("AccountId")]
-    public virtual Account Account { get; set; } = new();
+    public virtual Account? Account { get; set; }
 
     [Column("isActive")]
     public bool IsActive { get; set; } = true;
