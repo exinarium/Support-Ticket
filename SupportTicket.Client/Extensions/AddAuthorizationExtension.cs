@@ -17,6 +17,7 @@ public static class AddAuthorizationExtension
         services.AddScoped<IAuthorizationHandlerProvider, DefaultAuthorizationHandlerProvider>();
         services.AddScoped<IAuthorizationHandlerContextFactory, DefaultAuthorizationHandlerContextFactory>();
         services.AddScoped<IAuthorizationEvaluator, DefaultAuthorizationEvaluator>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }

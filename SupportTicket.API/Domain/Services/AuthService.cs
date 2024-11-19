@@ -26,19 +26,11 @@ public class AuthService(DataContext context, IOptions<JwtConfig> config) : IAut
             }
 
             var token = GenerateJwtToken(user);
-            return new AuthResult
-            {
-                Token = token,
-                Success = true
-            };
+            return new AuthResult(token, true);
         }
         catch (Exception e)
         {
-            return new AuthResult
-            {
-                Success = false,
-                ErrorMessage = e.Message
-            };
+            return new AuthResult(null, false, e.Message);
         }
     }
 

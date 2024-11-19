@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SupportTicket.API.Domain.Services;
 using SupportTicket.SDK.Models;
+using SupportTicket.SDK.Models.Requests.Auth;
 
 namespace SupportTicket.API.Controllers;
 

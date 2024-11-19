@@ -16,6 +16,11 @@ a, .btn-link {
     border-color: rgb(5, 5, 55);
 }
 
+.bg-primary {
+    background-color: rgb(5, 5, 55) !important;
+    border-color: rgb(5, 5, 55) !important;
+}
+
 .btn-primary:hover {
     color: #fff;
     background-color: rgb(5, 5, 100);

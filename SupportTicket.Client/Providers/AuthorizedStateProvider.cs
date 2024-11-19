@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
+using SupportTicket.Client.Resources;
 using SupportTicket.Client.Services;
 
 namespace SupportTicket.Client.Providers;
@@ -9,7 +10,7 @@ public class AuthorizedStateProvider(ISessionStorageService sessionStorageServic
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await sessionStorageService.GetItemAsync<string>("authToken");
+        var token = await sessionStorageService.GetItemAsync<string>(Constants.Token);
 
         if (string.IsNullOrEmpty(token))
         {

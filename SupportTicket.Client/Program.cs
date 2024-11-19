@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SupportTicket.Client;
+using SupportTicket.Client.Config;
 using SupportTicket.Client.Extensions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+builder.Services.Configure<ClientConfig>(
+    builder.Configuration.GetSection("ClientConfig"));
+
+builder.Services.AddHttpClientFactory();
 builder.Services.AddAuthorization();
 
 builder.RootComponents.Add<App>("#app");

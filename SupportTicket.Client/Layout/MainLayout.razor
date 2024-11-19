@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using SupportTicket.Client.Providers
+@using SupportTicket.Client.Resources
 @using SupportTicket.Client.Services
 @inherits LayoutComponentBase
 @inject ISessionStorageService SessionStorageService
@@ -25,7 +26,7 @@
 {
     public async Task OnLogout()
     {
-        await SessionStorageService.RemoveItemAsync("token");
-        ((AuthorizedStateProvider)AuthenticationStateProvider).NotifyUserAuthentication(string.Empty);
+        await SessionStorageService.RemoveItemAsync(Constants.Token);
+        ((AuthorizedStateProvider)AuthenticationStateProvider).NotifyUserAuthentication(null);
     }
 }

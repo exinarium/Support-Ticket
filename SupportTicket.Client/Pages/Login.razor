@@ -1,9 +1,12 @@
 @page "/login"
 @using Microsoft.AspNetCore.Components.Authorization
 @using SupportTicket.Client.Providers
+@using SupportTicket.Client.Resources
 @using SupportTicket.Client.Services
+@using SupportTicket.SDK.Models
 @inject ISessionStorageService SessionStorageService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAuthenticationService AuthenticationService
 
 <div class="sticky-top header-row d-flex align-items-center" style="height: 60px; padding-left: 20px;">
     <span style="color: white">Support Ticket</span>
@@ -11,25 +14,68 @@
 
 <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 60px);">
     <div class="w-50">
-        <h4 class="d-flex justify-content-center">Login</h4>
+        <h3 class="d-flex justify-content-center m-3"><b>Login</b></h3>
 
-        <label class="form-label" for="username">Username</label>
-        <input class="form-control mb-3" type="text" id="username" placeholder="Email Address"/>
+        <div class="alert alert-danger d-flex align-items-center justify-content-center @(showError ? "d-flex" : "d-none")" role="alert">
+            <span class="material-symbols-outlined">warning</span>
+            <div>
+                @errorMessage
+            </div>
+        </div>
 
-        <label class="form-label" for="username">Password</label>
-        <input class="form-control mb-3" type="password" id="password" placeholder="Password"/>
+        <div class="input-group mb-3">
+            <span class="input-group-text bg-primary" id="email-label">
+                <span class="material-symbols-outlined text-white">email</span>
+            </span>
+            <input
+                aria-label="Email"
+                aria-describedby="email-label"
+                class="form-control"
+                type="text"
+                id="email"
+                placeholder="Email Address"
+                @bind="email"
+                @bind:event="oninput"/>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text bg-primary" id="password-label">
+                <span class="material-symbols-outlined text-white">lock</span>
+            </span>
+            <input
+                aria-label="Password"
+                aria-describedby="password-label"
+                class="form-control"
+                type="password"
+                id="password"
+                placeholder="Password"
+                @bind="password"
+                @bind:event="oninput"/>
+        </div>
+
 
         <button class="btn btn-primary w-100" @onclick="OnLogin">Login</button>
     </div>
 </div>
 
 @code {
-
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string errorMessage = string.Empty;
+    private bool showError = false;
     private async Task OnLogin()
     {
-        //Test token
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjk5NTQ0MDAwLCJleHAiOjE3MzExNjY0MDAsImlhdCI6MTY5OTU0NDAwMH0.S8_BpV8RTIlzXZZ-c88sEwbxu8xGqS6JBK_dAXMwPtc";
-        await SessionStorageService.SetItemAsync("token", token);
-        ((AuthorizedStateProvider)AuthenticationStateProvider).NotifyUserAuthentication(token);
+        var result = await AuthenticationService.Login(email, password);
+
+        if (result.Success)
+        {
+            await SessionStorageService.SetItemAsync(Constants.Token, result.Token);
+            ((AuthorizedStateProvider)AuthenticationStateProvider).NotifyUserAuthentication(result.Token);
+        }
+        else
+        {
+            showError = true;
+            errorMessage = result.ErrorMessage;
+        }
     }
 }
