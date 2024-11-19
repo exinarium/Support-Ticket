@@ -10,34 +10,27 @@ public interface ISessionStorageService
     Task ClearAsync();
 }
 
-public class SessionStorageService : ISessionStorageService
+public class SessionStorageService(IJSRuntime jsRuntime) : ISessionStorageService
 {
-    private readonly IJSRuntime _jsRuntime;
-
-    public SessionStorageService(IJSRuntime jsRuntime)
-    {
-        _jsRuntime = jsRuntime;
-    }
-
     public async Task<T?> GetItemAsync<T>(string key)
     {
-        var json = await _jsRuntime.InvokeAsync<string?>("sessionStorage.getItem", key);
+        var json = await jsRuntime.InvokeAsync<string?>("sessionStorage.getItem", key);
         return json == null ? default : System.Text.Json.JsonSerializer.Deserialize<T>(json);
     }
 
     public async Task SetItemAsync<T>(string key, T value)
     {
         var json = System.Text.Json.JsonSerializer.Serialize(value);
-        await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, json);
+        await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, json);
     }
 
     public async Task RemoveItemAsync(string key)
     {
-        await _jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", key);
+        await jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", key);
     }
 
     public async Task ClearAsync()
     {
-        await _jsRuntime.InvokeVoidAsync("sessionStorage.clear");
+        await jsRuntime.InvokeVoidAsync("sessionStorage.clear");
     }
 }
