@@ -12,7 +12,11 @@ using SupportTicket.SDK.Models;
 
 namespace SupportTicket.API.Domain.Services;
 
-public class AuthService(DataContext context, IOptions<JwtConfig> config) : IAuthService
+public class AuthService(
+    DataContext context,
+    IOptions<JwtConfig> config,
+    ILogger<AuthService> logger,
+    IEmailService emailService) : IAuthService
 {
     public async Task<AuthResult> Login(string email, string password)
     {
@@ -31,6 +35,36 @@ public class AuthService(DataContext context, IOptions<JwtConfig> config) : IAut
         catch (Exception e)
         {
             return new AuthResult(null, false, e.Message);
+        }
+    }
+
+    public async Task SendForgetPasswordResetEmail(string email)
+    {
+        try
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == null )
+            {
+                return;
+            }
+
+            var token = Guid.NewGuid();
+            user.ResetPasswordToken = token.ToString();
+            user.ResetPasswordTokenExpirationDate = DateTime.UtcNow.AddMinutes(30);
+
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+
+            // TODO: WIP
+            // emailService.SendEmailAsync(new Email()
+            // {
+            //     To = [user.Email],
+            // });
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
         }
     }
 
@@ -76,4 +110,6 @@ public class AuthService(DataContext context, IOptions<JwtConfig> config) : IAut
 public interface IAuthService
 {
     Task<AuthResult> Login(string email, string password);
+
+    Task SendForgetPasswordResetEmail(string email);
 }

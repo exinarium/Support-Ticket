@@ -11,9 +11,17 @@ namespace SupportTicket.API.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [AllowAnonymous]
-    [HttpPost("login")]
+    [HttpPost("[action]")]
     public async Task<AuthResult> Login([FromBody] LoginRequest request)
     {
         return await authService.Login(request.Email, request.Password);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("[action]")]
+    public async Task<JsonResult> SendForgetPasswordEmail([FromBody] LoginRequest request)
+    {
+        await authService.SendForgetPasswordResetEmail(request.Email);
+        return new JsonResult("Password reset email sent");
     }
 }

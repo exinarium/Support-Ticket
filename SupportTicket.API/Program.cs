@@ -1,4 +1,6 @@
 using System.Text;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SupportTicket.API.Domain.Config;
 using SupportTicket.API.Domain.Repository.Models;
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Configuration
 builder.Services.Configure<DatabaseConfig>(
     builder.Configuration.GetSection(nameof(DatabaseConfig)));
+
+var databaseConfig = builder.Configuration.GetSection(nameof(DatabaseConfig)).Get<DatabaseConfig>();
 
 builder.Services.Configure<JwtConfig>(
     builder.Configuration.GetSection(nameof(JwtConfig)));
@@ -52,6 +56,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
 
@@ -59,6 +64,21 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options => options
+        .UseNpgsqlConnection(
+            $"Server={databaseConfig!.Host};" +
+            $"Port={databaseConfig.Port};" +
+            $"Database={databaseConfig.DatabaseName};" +
+            $"User Id={databaseConfig.DatabaseName};" +
+            $"Password={databaseConfig.Password}")
+    ));
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddRouting(options =>
 {
@@ -79,6 +99,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseHangfireDashboard();
 
 app.UseHttpsRedirection();
 

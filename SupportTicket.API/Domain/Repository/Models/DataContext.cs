@@ -9,6 +9,8 @@ public class DataContext(IOptions<DatabaseConfig> databaseConfig) : DbContext
     private DatabaseConfig DatabaseConfig => databaseConfig.Value;
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Email> Emails { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(connectionString:

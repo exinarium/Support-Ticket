@@ -92,6 +92,7 @@ public class User
     public virtual ICollection<File> Files { get; set; } = [];
     public virtual ICollection<Comment> UpdatedComments { get; set; } = [];
     public virtual ICollection<Comment> CreatedComments { get; set; } = [];
+    public virtual ICollection<Email> CreatedEmails { get; set; } = [];
 }
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
