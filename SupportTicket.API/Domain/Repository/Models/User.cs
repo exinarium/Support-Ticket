@@ -76,6 +76,13 @@ public class User
     [Column("isActive")]
     public bool IsActive { get; set; } = true;
 
+    [Column("resetPasswordToken")]
+    [MaxLength(50)]
+    public string? ResetPasswordToken { get; set; }
+
+    [Column("resetPasswordTokenExpirationDate")]
+    public DateTime? ResetPasswordTokenExpirationDate { get; set; }
+
     // Inverse navigation properties
     public virtual ICollection<User> CreatedUsers { get; set; } = [];
     public virtual ICollection<User> UpdatedUsers { get; set; } = [];
