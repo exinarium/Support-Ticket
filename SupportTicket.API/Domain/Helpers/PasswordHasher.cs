@@ -8,7 +8,7 @@ public static class PasswordHasher
     private const int KeySize = 32;
     private const int Iterations = 100000;
     private static readonly HashAlgorithmName HashAlgorithm = HashAlgorithmName.SHA256;
-    private const char Delimiter = '/';
+    private const string Delimiter = "__";
 
     public static string HashPassword(string password)
     {

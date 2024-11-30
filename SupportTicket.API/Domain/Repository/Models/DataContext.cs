@@ -9,7 +9,18 @@ public class DataContext(IOptions<DatabaseConfig> databaseConfig) : DbContext
     private DatabaseConfig DatabaseConfig => databaseConfig.Value;
 
     public DbSet<User> Users { get; set; }
+
     public DbSet<Email> Emails { get; set; }
+
+    public DbSet<Account> Accounts { get; set; }
+
+    public DbSet<Comment> Comments { get; set; }
+
+    public DbSet<File> Files { get; set; }
+
+    public DbSet<Ticket> Tickets { get; set; }
+
+    public DbSet<TicketHistory> TicketHistory { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -24,6 +24,15 @@ builder.Services.Configure<JwtConfig>(
 
 var jwtConfig = builder.Configuration.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
 
+builder.Services.Configure<EmailConfig>(
+    builder.Configuration.GetSection(nameof(EmailConfig)));
+
+builder.Services.Configure<SendGridConfig>(
+    builder.Configuration.GetSection(nameof(SendGridConfig)));
+
+builder.Services.Configure<ServerConfig>(
+    builder.Configuration.GetSection(nameof(ServerConfig)));
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,6 +64,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -74,7 +84,7 @@ builder.Services.AddHangfire(configuration => configuration
             $"Server={databaseConfig!.Host};" +
             $"Port={databaseConfig.Port};" +
             $"Database={databaseConfig.DatabaseName};" +
-            $"User Id={databaseConfig.DatabaseName};" +
+            $"User Id={databaseConfig.Username};" +
             $"Password={databaseConfig.Password}")
     ));
 
