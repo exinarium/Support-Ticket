@@ -7,6 +7,7 @@ using SupportTicket.API.Domain.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SupportTicket.API.Domain.Services;
+using GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +96,12 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
 });
 
+builder.Services.AddGraphQL(graph =>
+{
+    graph.AddSystemTextJson();
+    graph.AddAuthorizationRule();
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -113,5 +120,10 @@ app.MapControllers();
 app.UseHangfireDashboard();
 
 app.UseHttpsRedirection();
+app.UseGraphQL("/graphql");
+
+#if DEBUG
+    app.UseGraphQLGraphiQL("/graphiql");
+#endif
 
 app.Run();
