@@ -16,7 +16,9 @@
     <div class="w-50">
         <h3 class="d-flex justify-content-center m-3"><b>Login</b></h3>
 
-        <div class="alert alert-danger d-flex align-items-center justify-content-center @(showError ? "d-flex" : "d-none")" role="alert">
+        <div
+            class="alert alert-danger d-flex align-items-center justify-content-center @(showError ? "d-flex" : "d-none")"
+            role="alert">
             <span class="material-symbols-outlined">warning</span>
             <div>
                 @errorMessage
@@ -53,6 +55,9 @@
                 @bind:event="oninput"/>
         </div>
 
+        <div class="input-group mb-3">
+            <a href="/forgot-password">Forgot password?</a>
+        </div>
 
         <button class="btn btn-primary w-100" @onclick="OnLogin">Login</button>
     </div>
@@ -63,6 +68,7 @@
     private string password = string.Empty;
     private string errorMessage = string.Empty;
     private bool showError = false;
+
     private async Task OnLogin()
     {
         var result = await AuthenticationService.Login(email, password);
@@ -78,4 +84,5 @@
             errorMessage = result.ErrorMessage;
         }
     }
+
 }

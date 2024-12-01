@@ -63,7 +63,7 @@ public class AuthService(
             {
                 To = [user.Email],
                 Subject = "Reset Password",
-                HtmlBody = @$"<p>A password reset has been requested for your account. To reset your password <a href='{serverConfig.Value.BaseUrl}/Auth/ResetPassword'>click here</a></p>
+                HtmlBody = @$"<p>A password reset has been requested for your account. To reset your password <a href='{serverConfig.Value.BaseUrl}/reset-password/{token}'>click here</a></p>
                             <p>If you did not request this reset, please ignore this email.</p>",
                 From = emailConfig.Value.FromAddress,
                 FromName = emailConfig.Value.FromName,

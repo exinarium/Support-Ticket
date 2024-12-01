@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using SupportTicket.Client.Pages
+@using SupportTicket.Client.Pages.Auth
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
@@ -9,7 +10,18 @@
                     <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
                 </Authorized>
                 <NotAuthorized>
-                    <Login />
+                    @if (routeData.PageType == typeof(Home) || routeData.PageType == typeof(Login))
+                    {
+                        <Login />
+                    }
+                    else if (routeData.PageType == typeof(ForgotPassword))
+                    {
+                        <ForgotPassword />
+                    }
+                    else if (routeData.PageType == typeof(ResetPassword))
+                    {
+                        <ResetPassword Token="@routeData.RouteValues["Token"]?.ToString()" />
+                    }
                 </NotAuthorized>
             </AuthorizeView>
         </Found>
