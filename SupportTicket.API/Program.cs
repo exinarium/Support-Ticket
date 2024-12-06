@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SupportTicket.API.Domain.Services;
 using GraphQL;
+using GraphQL.Types;
+using SupportTicket.API.Domain.GraphQL.Mutation;
+using SupportTicket.API.Domain.GraphQL.Query;
+using SupportTicket.API.Domain.GraphQL.Schema;
+using SupportTicket.API.Domain.GraphQL.Type;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +74,14 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddTransient<AccountType>();
+builder.Services.AddTransient<UserType>();
+builder.Services.AddTransient<UserInputType>();
+builder.Services.AddTransient<UserQuery>();
+builder.Services.AddTransient<UserMutation>();
+builder.Services.AddTransient<ISchema, UserSchema>();
+
 builder.Services.AddControllers();
 
 // Add services to the container.
@@ -98,6 +111,7 @@ builder.Services.AddRouting(options =>
 
 builder.Services.AddGraphQL(graph =>
 {
+    graph.AddAutoSchema<ISchema>();
     graph.AddSystemTextJson();
     graph.AddAuthorizationRule();
 });
@@ -109,10 +123,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseGraphQLGraphiQL("/graphiql");
 }
 
 app.UseCors("AllowAll");
 app.UseRouting();
+
+app.UseGraphQL<ISchema>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
@@ -120,10 +138,5 @@ app.MapControllers();
 app.UseHangfireDashboard();
 
 app.UseHttpsRedirection();
-app.UseGraphQL("/graphql");
-
-#if DEBUG
-    app.UseGraphQLGraphiQL("/graphiql");
-#endif
 
 app.Run();
