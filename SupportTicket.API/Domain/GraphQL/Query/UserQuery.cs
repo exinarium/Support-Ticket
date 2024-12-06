@@ -14,6 +14,7 @@ public class UserQuery : ObjectGraphType
             .ResolveAsync(async (context) => await dataContext.Users.ToListAsync());
 
         Field<UserType>("user")
+            .Authorize()
             .Arguments(new QueryArgument<GuidGraphType>
             {
                 Name = "id",

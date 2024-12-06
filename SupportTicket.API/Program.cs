@@ -129,8 +129,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseRouting();
 
-app.UseGraphQL<ISchema>();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
@@ -138,5 +136,6 @@ app.MapControllers();
 app.UseHangfireDashboard();
 
 app.UseHttpsRedirection();
+app.UseGraphQL<ISchema>();
 
 app.Run();
