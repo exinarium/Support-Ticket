@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace SupportTicket.API.Domain.Helpers;
 
 public static class PasswordHasher

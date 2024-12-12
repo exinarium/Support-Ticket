@@ -1,9 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using SupportTicket.SDK.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace SupportTicket.API.Domain.Repository.Models;
 
 [Table("tickets")]
@@ -45,27 +39,27 @@ public class Ticket
     public Guid CreatedById { get; set; } = Guid.Empty;
 
     [ForeignKey("CreatedById")]
-    public User CreatedBy { get; set; } = new();
+    public virtual User CreatedBy { get; set; } = new();
 
     [Required]
     [Column("updatedBy")]
     public Guid? UpdatedById { get; set; }
 
     [ForeignKey("UpdatedById")]
-    public User? UpdatedBy { get; set; }
+    public virtual User? UpdatedBy { get; set; }
 
     [Required]
     [Column("assignedTo")]
     public Guid? AssignedToId { get; set; }
 
     [ForeignKey("AssignedToId")]
-    public User? AssignedTo { get; set; }
+    public virtual User? AssignedTo { get; set; }
 
-    public ICollection<TicketHistory> History { get; set; } = [];
+    public virtual ICollection<TicketHistory> History { get; set; } = [];
 
-    public ICollection<Comment> Comments { get; set; } = [];
+    public virtual ICollection<Comment> Comments { get; set; } = [];
 
-    public ICollection<File> Attachments { get; set; } = [];
+    public virtual ICollection<File> Attachments { get; set; } = [];
 }
 
 public class TicketConfiguration : IEntityTypeConfiguration<Ticket>

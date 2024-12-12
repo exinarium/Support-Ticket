@@ -1,9 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SupportTicket.SDK.Enums;
-
 namespace SupportTicket.API.Domain.Repository.Models;
 
 [Table("emails")]
@@ -68,7 +62,7 @@ public class Email
     public Guid CreatedById { get; set; } = Guid.Empty;
 
     [ForeignKey("CreatedById")]
-    public User CreatedBy { get; set; } = new();
+    public virtual User CreatedBy { get; set; } = new();
 }
 
 public class EmailConfiguration : IEntityTypeConfiguration<Email>

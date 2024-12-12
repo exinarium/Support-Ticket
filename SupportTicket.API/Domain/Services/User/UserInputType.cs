@@ -1,6 +1,4 @@
-using GraphQL.Types;
-
-namespace SupportTicket.API.Domain.GraphQL.Type;
+namespace SupportTicket.API.Domain.Services.User;
 
 public class UserInputType : InputObjectGraphType
 {

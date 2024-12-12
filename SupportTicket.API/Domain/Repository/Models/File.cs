@@ -1,8 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace SupportTicket.API.Domain.Repository.Models;
 
 [Table("files")]
@@ -39,19 +34,19 @@ public class File
     public Guid? UploadedById { get; set; }
 
     [ForeignKey("UploadedById")]
-    public User? UploadedBy { get; set; }
+    public virtual User? UploadedBy { get; set; }
 
     [Column("ticket")]
     public Guid? TicketId { get; set; }
 
     [ForeignKey("TicketId")]
-    public Ticket? Ticket { get; set; }
+    public virtual Ticket? Ticket { get; set; }
 
     [Column("comment")]
     public Guid? CommentId { get; set; }
 
     [ForeignKey("CommentId")]
-    public Comment? Comment { get; set; }
+    public virtual Comment? Comment { get; set; }
 }
 
 public class FileConfiguration : IEntityTypeConfiguration<File>

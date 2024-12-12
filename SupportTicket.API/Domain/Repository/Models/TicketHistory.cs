@@ -1,8 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace SupportTicket.API.Domain.Repository.Models;
 
 [Table("ticketHistory")]
@@ -41,14 +36,14 @@ public class TicketHistory
     public Guid TicketId { get; set; } = Guid.Empty;
 
     [ForeignKey("TicketId")]
-    public Ticket Ticket { get; set; } = new();
+    public virtual Ticket Ticket { get; set; } = new();
 
     [Required]
     [Column("ChangedBy")]
     public Guid ChangedById { get; set; } = Guid.Empty;
 
     [ForeignKey("ChangedById")]
-    public User ChangedBy { get; set; } = new();
+    public virtual User ChangedBy { get; set; } = new();
 }
 
 public class TicketHistoryConfiguration : IEntityTypeConfiguration<TicketHistory>

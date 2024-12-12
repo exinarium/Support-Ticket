@@ -1,8 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace SupportTicket.API.Domain.Repository.Models;
 
 [Table("comments")]
@@ -32,30 +27,30 @@ public class Comment
     public Guid TicketId { get; set; } = Guid.Empty;
 
     [ForeignKey("TicketId")]
-    public Ticket Ticket { get; set; } = new();
+    public virtual Ticket Ticket { get; set; } = new();
 
     [Required]
     [Column("createdBy")]
     public Guid CreatedById { get; set; } = Guid.Empty;
 
     [ForeignKey("CreatedById")]
-    public User CreatedBy { get; set; } = new();
+    public virtual User CreatedBy { get; set; } = new();
 
     [Column("updatedBy")]
     public Guid? UpdatedById { get; set; }
 
     [ForeignKey("UpdatedById")]
-    public User? UpdatedBy { get; set; }
+    public virtual User? UpdatedBy { get; set; }
 
     [Column("parentComment")]
     public Guid? ParentCommentId { get; set; }
 
     [ForeignKey("ParentCommentId")]
-    public Comment? ParentComment { get; set; }
+    public virtual Comment? ParentComment { get; set; }
 
-    public ICollection<Comment> Replies { get; set; } = [];
+    public virtual ICollection<Comment> Replies { get; set; } = [];
 
-    public ICollection<File> Attachments { get; set; } = [];
+    public virtual ICollection<File> Attachments { get; set; } = [];
 }
 
 public class CommentConfiguration : IEntityTypeConfiguration<Comment>

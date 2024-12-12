@@ -1,31 +1,29 @@
-using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using SupportTicket.API.Domain.Config;
-using SupportTicket.API.Domain.Helpers;
-using SupportTicket.API.Domain.Repository.Models;
-using SupportTicket.SDK.Enums;
-using SupportTicket.SDK.Models;
+namespace SupportTicket.API.Domain.Services.Auth;
 
-namespace SupportTicket.API.Domain.Services;
+public interface IAuthService
+{
+    Task<AuthResult> Login(string email, string password);
+
+    Task SendForgetPasswordResetEmail(string email);
+
+    Task<bool> ResetPassword(string token, string newPassword);
+}
 
 public class AuthService(
-    DataContext context,
+    IDbContextFactory<DataContext> contextFactory,
     IOptions<JwtConfig> config,
     ILogger<AuthService> logger,
     IOptions<ServerConfig> serverConfig,
     IOptions<EmailConfig> emailConfig,
-    IEmailService emailService) : IAuthService
+    IEmailService emailService) : ServiceBase(contextFactory), IAuthService
 {
+
+
     public async Task<AuthResult> Login(string email, string password)
     {
         try
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
             if (user == null || PasswordHasher.VerifyPassword(user.Password, password) == false)
             {
@@ -45,7 +43,7 @@ public class AuthService(
     {
         try
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
             if (user == null )
             {
@@ -56,10 +54,10 @@ public class AuthService(
             user.ResetPasswordToken = token.ToString();
             user.ResetPasswordTokenExpirationDate = DateTime.UtcNow.AddMinutes(30);
 
-            context.Users.Update(user);
-            await context.SaveChangesAsync();
+            Context.Users.Update(user);
+            await Context.SaveChangesAsync();
 
-            emailService.SendEmailAsync(new Email()
+            emailService.SendEmailAsync(new Repository.Models.Email()
             {
                 To = [user.Email],
                 Subject = "Reset Password",
@@ -89,7 +87,7 @@ public class AuthService(
     {
         try
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.ResetPasswordToken == token && x.ResetPasswordTokenExpirationDate > DateTime.UtcNow);
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.ResetPasswordToken == token && x.ResetPasswordTokenExpirationDate > DateTime.UtcNow);
 
             if (user == null )
             {
@@ -100,8 +98,8 @@ public class AuthService(
             user.ResetPasswordTokenExpirationDate = null;
             user.Password = PasswordHasher.HashPassword(newPassword);
 
-            context.Users.Update(user);
-            await context.SaveChangesAsync();
+            Context.Users.Update(user);
+            await Context.SaveChangesAsync();
 
             return true;
         }
@@ -112,7 +110,7 @@ public class AuthService(
         }
     }
 
-    private string GenerateJwtToken(User user)
+    private string GenerateJwtToken(Repository.Models.User user)
     {
         var issuer = config.Value.Issuer;
         var audience = config.Value.Audience;
@@ -149,13 +147,4 @@ public class AuthService(
 
         return stringToken;
     }
-}
-
-public interface IAuthService
-{
-    Task<AuthResult> Login(string email, string password);
-
-    Task SendForgetPasswordResetEmail(string email);
-
-    Task<bool> ResetPassword(string token, string newPassword);
 }

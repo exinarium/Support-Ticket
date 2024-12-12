@@ -1,29 +1,21 @@
-using System.Text;
-using Hangfire;
-using Hangfire.PostgreSql;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using SupportTicket.API.Domain.Config;
-using SupportTicket.API.Domain.Repository.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SupportTicket.API.Domain.Services;
-using GraphQL;
-using GraphQL.Types;
-using SupportTicket.API.Domain.GraphQL.Mutation;
-using SupportTicket.API.Domain.GraphQL.Query;
-using SupportTicket.API.Domain.GraphQL.Schema;
-using SupportTicket.API.Domain.GraphQL.Type;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql());
-
-// Configuration
 builder.Services.Configure<DatabaseConfig>(
     builder.Configuration.GetSection(nameof(DatabaseConfig)));
 
-var databaseConfig = builder.Configuration.GetSection(nameof(DatabaseConfig)).Get<DatabaseConfig>();
+builder.Services.AddPooledDbContextFactory<DataContext>((serviceProvider, options) =>
+{
+    var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
+
+    options.UseNpgsql(
+        $"Server={databaseConfig.Host};" +
+        $"Port={databaseConfig.Port};" +
+        $"User Id={databaseConfig.Username};" +
+        $"Password={databaseConfig.Password};" +
+        $"Database={databaseConfig.DatabaseName};");
+
+    options.UseLazyLoadingProxies();
+});
 
 builder.Services.Configure<JwtConfig>(
     builder.Configuration.GetSection(nameof(JwtConfig)));
@@ -71,16 +63,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
-
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-builder.Services.AddTransient<AccountType>();
-builder.Services.AddTransient<UserType>();
-builder.Services.AddTransient<UserInputType>();
-builder.Services.AddTransient<UserQuery>();
-builder.Services.AddTransient<UserMutation>();
-builder.Services.AddTransient<ISchema, UserSchema>();
+builder.Services.AddSystemServices();
 
 builder.Services.AddControllers();
 
@@ -89,18 +72,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHangfire(configuration => configuration
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UsePostgreSqlStorage(options => options
-        .UseNpgsqlConnection(
-            $"Server={databaseConfig!.Host};" +
-            $"Port={databaseConfig.Port};" +
-            $"Database={databaseConfig.DatabaseName};" +
-            $"User Id={databaseConfig.Username};" +
-            $"Password={databaseConfig.Password}")
-    ));
+builder.Services.AddHangfire((serviceProvider, configuration) =>
+{
+    var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
+
+    configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(options =>
+        {
+            options.UseNpgsqlConnection(
+                $"Server={databaseConfig!.Host};" +
+                $"Port={databaseConfig.Port};" +
+                $"Database={databaseConfig.DatabaseName};" +
+                $"User Id={databaseConfig.Username};" +
+                $"Password={databaseConfig.Password}");
+        });
+});
 
 builder.Services.AddHangfireServer();
 
@@ -109,12 +98,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
 });
 
-builder.Services.AddGraphQL(graph =>
-{
-    graph.AddAutoSchema<ISchema>();
-    graph.AddSystemTextJson();
-    graph.AddAuthorizationRule();
-});
+builder.Services.AddGraphQLServices();
 
 var app = builder.Build();
 

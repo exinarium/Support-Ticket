@@ -1,26 +1,25 @@
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Text.Json;
-using Hangfire;
-using Microsoft.Extensions.Options;
-using SupportTicket.API.Domain.Config;
-using SupportTicket.API.Domain.Repository.Models;
 using File = System.IO.File;
 
-namespace SupportTicket.API.Domain.Services;
+namespace SupportTicket.API.Domain.Services.Email;
+
+public interface IEmailService
+{
+    Task ExecuteSendEmail(string emailId);
+
+    Task SendEmailAsync(Repository.Models.Email email);
+}
 
 public class EmailService(
     ILogger<EmailService> logger,
-    DataContext context,
+    IDbContextFactory<DataContext> contextFactory,
     IHttpClientFactory httpClientFactory,
     IOptions<EmailConfig> emailConfig,
-    IOptions<SendGridConfig> sendGridConfig) : IEmailService
+    IOptions<SendGridConfig> sendGridConfig) :  ServiceBase(contextFactory), IEmailService
 {
-    public async Task SendEmailAsync(Email email)
+    public async Task SendEmailAsync(Repository.Models.Email email)
     {
-        var savedMail = context.Emails.Add(email);
-        await context.SaveChangesAsync();
+        var savedMail = Context.Emails.Add(email);
+        await Context.SaveChangesAsync();
 
         Hangfire.BackgroundJob.Enqueue<IEmailService>(x => x.ExecuteSendEmail(savedMail.Entity.Id.ToString()));
     }
@@ -30,7 +29,7 @@ public class EmailService(
     {
         try
         {
-            var email = await context.Emails.FindAsync(Guid.Parse(emailId));
+            var email = await Context.Emails.FindAsync(Guid.Parse(emailId));
 
             if (email != null)
             {
@@ -51,7 +50,7 @@ public class EmailService(
         }
     }
 
-    private async Task SendSMTPEmail(Email email)
+    private async Task SendSMTPEmail(Repository.Models.Email email)
     {
         using (MailMessage mail = new MailMessage())
         {
@@ -106,7 +105,7 @@ public class EmailService(
         }
     }
 
-    private async Task SendProviderEmail(Email email)
+    private async Task SendProviderEmail(Repository.Models.Email email)
     {
         using (MailMessage mail = new MailMessage())
         {
@@ -157,11 +156,4 @@ public class EmailService(
             }
         }
     }
-}
-
-public interface IEmailService
-{
-    Task ExecuteSendEmail(string emailId);
-
-    Task SendEmailAsync(Email email);
 }
