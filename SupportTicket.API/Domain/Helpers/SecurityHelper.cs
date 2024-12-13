@@ -1,6 +1,6 @@
 namespace SupportTicket.API.Domain.Helpers;
 
-public static class PasswordHasher
+public static class SecurityHelper
 {
     private const int SaltSize = 16;
     private const int KeySize = 32;

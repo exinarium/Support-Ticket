@@ -2,29 +2,33 @@ namespace SupportTicket.API.Domain.Services.User;
 
 public class UserMutations : ObjectGraphType
 {
-    public UserMutations()
+    public UserMutations(IUserService userService)
     {
         Description = "Mutations in the user domain.";
 
         Field<UserType>("update")
+            .Authorize()
             .Arguments(new QueryArgument<UserInputType>
             {
                 Name = "user",
             })
             .ResolveAsync(async (context) =>
             {
-                return null;
-                // var updateUser = context.GetArgument<User>("user");
-                // var id = updateUser.Id;
-                // var user = await  dataContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-                //
-                // user.FirstName = updateUser.FirstName;
-                // user.LastName = updateUser.LastName;
-                //
-                // await dataContext.SaveChangesAsync();
-                // return user;
+                return await userService.UpdateUser(context.GetArgument<Repository.Models.User>("user"));
             })
             .Description("Update the user's details.");
+
+        Field<UserType>("create")
+            .Authorize()
+            .Arguments(new QueryArgument<UserInputType>
+            {
+                Name = "user",
+            })
+            .ResolveAsync(async (context) =>
+            {
+                return await userService.CreateUser(context.GetArgument<Repository.Models.User>("user"));
+            })
+            .Description("Create a new user.");
 
     }
 }

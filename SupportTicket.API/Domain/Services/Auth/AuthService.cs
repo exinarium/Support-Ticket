@@ -17,15 +17,13 @@ public class AuthService(
     IOptions<EmailConfig> emailConfig,
     IEmailService emailService) : ServiceBase(contextFactory), IAuthService
 {
-
-
     public async Task<AuthResult> Login(string email, string password)
     {
         try
         {
             var user = await Context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            if (user == null || PasswordHasher.VerifyPassword(user.Password, password) == false)
+            if (user == null || SecurityHelper.VerifyPassword(user.Password, password) == false)
             {
                 throw new Exception("Invalid credentials");
             }
@@ -96,7 +94,7 @@ public class AuthService(
 
             user.ResetPasswordToken = null;
             user.ResetPasswordTokenExpirationDate = null;
-            user.Password = PasswordHasher.HashPassword(newPassword);
+            user.Password = SecurityHelper.HashPassword(newPassword);
 
             Context.Users.Update(user);
             await Context.SaveChangesAsync();

@@ -115,7 +115,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             LastName = "Creativ360",
             Email = "admin@creativ360.com",
             AccountId = Guid.Parse("10dce69c-ac67-40d9-927b-86fe23206a90"),
-            Password = PasswordHasher.HashPassword("P@ssw0rd"),
+            Password = SecurityHelper.HashPassword("P@ssw0rd"),
             CreatedById = Guid.Parse("863e485c-196d-41e0-ad03-90e94c3890af"),
             IsEmailConfirmed = true,
             IsLockoutEnabled = false,
