@@ -21,7 +21,7 @@ public class AuthService(
     {
         try
         {
-            var user = await Context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.Email == email && x.IsActive == true);
 
             if (user == null || SecurityHelper.VerifyPassword(user.Password, password) == false)
             {
