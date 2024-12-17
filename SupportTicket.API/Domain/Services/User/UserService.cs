@@ -91,10 +91,22 @@ public class UserService(IDbContextFactory<DataContext> contextFactory, IHttpCon
         user.UpdatedDateTime = DateTime.UtcNow;
         user.UpdatedById = Guid.Parse(httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
+        if (!string.IsNullOrWhiteSpace(model.FirstName))
+        {
+            user.FirstName = model.FirstName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.LastName))
+        {
+            user.LastName = model.LastName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.Password))
+        {
+            user.Password = SecurityHelper.HashPassword(model.Password);
+        }
+
         user.IsActive = model.IsActive;
-        user.Password = SecurityHelper.HashPassword(model.Password);
         user.IsLockoutEnabled = model.IsLockoutEnabled;
 
         Context.Users.Update(user);
