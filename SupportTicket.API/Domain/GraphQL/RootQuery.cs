@@ -2,9 +2,12 @@ namespace SupportTicket.API.Domain.GraphQL;
 
 public class RootQuery : ObjectGraphType
 {
-    public RootQuery(UserQueries userQueries)
+    public RootQuery()
     {
         Field<UserQueries>("users")
-            .Resolve(context => userQueries);
+            .Resolve(_ => new { });
+
+        Field<AccountQueries>("accounts")
+            .Resolve(_ => new { });
     }
 }

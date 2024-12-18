@@ -65,6 +65,7 @@ public class UserService(IDbContextFactory<DataContext> contextFactory, IHttpCon
             throw new ArgumentNullException("The user instance cannot be null.");
         }
 
+        model.Id = Guid.NewGuid();
         model.CreatedDateTime = DateTime.UtcNow;
         model.CreatedById = Guid.Parse(httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
 

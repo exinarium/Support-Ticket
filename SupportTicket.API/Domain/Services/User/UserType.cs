@@ -4,8 +4,6 @@ namespace SupportTicket.API.Domain.Services.User;
 
 public class UserType : ObjectGraphType<Repository.Models.User>
 {
-    private readonly IDbContextFactory<DataContext> _contextFactory;
-
     public UserType(
         )
     {
