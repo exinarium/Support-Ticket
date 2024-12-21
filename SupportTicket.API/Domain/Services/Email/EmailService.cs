@@ -1,5 +1,3 @@
-using File = System.IO.File;
-
 namespace SupportTicket.API.Domain.Services.Email;
 
 public interface IEmailService
@@ -81,9 +79,9 @@ public class EmailService(
                 {
                     Attachment attachment = new Attachment(attachmentFilename, MediaTypeNames.Application.Octet);
                     ContentDisposition disposition = attachment.ContentDisposition;
-                    disposition.CreationDate = File.GetCreationTime(attachmentFilename);
-                    disposition.ModificationDate = File.GetLastWriteTime(attachmentFilename);
-                    disposition.ReadDate = File.GetLastAccessTime(attachmentFilename);
+                    disposition.CreationDate = System.IO.File.GetCreationTime(attachmentFilename);
+                    disposition.ModificationDate = System.IO.File.GetLastWriteTime(attachmentFilename);
+                    disposition.ReadDate = System.IO.File.GetLastAccessTime(attachmentFilename);
                     disposition.FileName = Path.GetFileName(attachmentFilename);
                     disposition.Size = new FileInfo(attachmentFilename).Length;
                     disposition.DispositionType = DispositionTypeNames.Attachment;

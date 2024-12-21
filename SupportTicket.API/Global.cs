@@ -25,6 +25,7 @@ global using GraphQL.Types;
 
 global using SupportTicket.SDK.Enums;
 global using SupportTicket.SDK.Models;
+global using SupportTicket.API.Domain.Helpers.Models;
 global using SupportTicket.SDK.Models.Requests.Auth;
 
 global using SupportTicket.API.Domain.Config;
@@ -35,5 +36,8 @@ global using SupportTicket.API.Domain.Services;
 global using SupportTicket.API.Domain.Services.Account;
 global using SupportTicket.API.Domain.Services.Auth;
 global using SupportTicket.API.Domain.Services.Base;
+global using SupportTicket.API.Domain.Services.Comment;
 global using SupportTicket.API.Domain.Services.Email;
+global using SupportTicket.API.Domain.Services.File;
+global using SupportTicket.API.Domain.Services.Ticket;
 global using SupportTicket.API.Domain.Services.User;
