@@ -41,14 +41,12 @@ public class Ticket
     [ForeignKey("CreatedById")]
     public virtual User CreatedBy { get; set; } = new();
 
-    [Required]
     [Column("updatedBy")]
     public Guid? UpdatedById { get; set; }
 
     [ForeignKey("UpdatedById")]
     public virtual User? UpdatedBy { get; set; }
 
-    [Required]
     [Column("assignedTo")]
     public Guid? AssignedToId { get; set; }
 
